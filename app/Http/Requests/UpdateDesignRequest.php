@@ -24,7 +24,8 @@ class UpdateDesignRequest extends FormRequest
     {
         return [
             "title" => ["required", Rule::unique('designs')->ignore($this->design?->id)],
-            "description" => ['required',"string","min:20"]
+            "description" => ['required',"string","min:20"],
+            'tags' => ['required'],
         ];
     }
 }

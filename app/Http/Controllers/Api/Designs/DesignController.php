@@ -8,9 +8,16 @@ use App\Http\Resources\DesignResource;
 use App\Models\Design;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DesignController extends Controller
 {
+    public function index()
+    {
+        $designs = Design::with(["tags", "user"])->get();
+        return DesignResource::collection($designs);
+    }
+
     public function update(UpdateDesignRequest $request, Design $design)
     {
         $this->authorize("update", $design);
@@ -24,6 +31,23 @@ class DesignController extends Controller
             "is_live" => $is_live
         ]);
 
+        $design->retag($request->tags);
+
         return new DesignResource($design);
+    }
+
+    public function destroy(Design $design)
+    {
+        $this->authorize('delete', $design);
+
+        foreach (['thumbnail', 'large', 'original'] as $size) {
+            if (Storage::disk($design->disk)->exists("/uploads/designs/{$size}/" . $design->image)) {
+                Storage::disk($design->disk)->delete("/uploads/designs/{$size}/" . $design->image);
+            }
+        }
+
+        $design->delete();
+
+        return response()->json(status: 200);
     }
 }
