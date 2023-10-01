@@ -31,4 +31,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     // comments
     Route::post("designs/{design}/comments", [CommentController::class, "store"]);
+    Route::get("designs/{design}/comments/{comment}", [CommentController::class, "show"]);
+    Route::put("designs/{design}/comments/{comment}", [CommentController::class, "update"]);
+    Route::delete("designs/{design}/comments/{comment}", [CommentController::class, "destroy"]);
 });
