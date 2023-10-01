@@ -14,7 +14,7 @@ class DesignController extends Controller
 {
     public function index()
     {
-        $designs = Design::with(["tags", "user"])->get();
+        $designs = Design::with(["tags", "user", "likes"])->get();
         return DesignResource::collection($designs);
     }
 

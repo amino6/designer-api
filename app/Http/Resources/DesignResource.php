@@ -16,10 +16,11 @@ class DesignResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => new UserResource($this->user),
+            'user' => new UserResource($this->whenLoaded("user")),
             'title' => $this->title,
             'slug' => $this->slug,
             'title' => $this->title,
+            'likes' => $this->likes->count(),
             'images' => $this->images,
             'tags_list' => [
                 'tag' => $this->tagArray,
