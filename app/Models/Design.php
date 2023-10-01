@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Cviebrock\EloquentTaggable\Taggable;
+use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
 
 class Design extends Model
 {
-    use HasFactory, Taggable, Likeable;
+    use HasFactory, Taggable, Likeable, CascadesDeletes;
+
+    protected $cascadeDeletes = ['comments', 'likes'];
 
     protected $fillable = [
         'user_id',

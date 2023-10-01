@@ -34,4 +34,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get("designs/{design}/comments/{comment}", [CommentController::class, "show"]);
     Route::put("designs/{design}/comments/{comment}", [CommentController::class, "update"]);
     Route::delete("designs/{design}/comments/{comment}", [CommentController::class, "destroy"]);
+
+    // likes
+    Route::post('/designs/{design}/like',[DesignController::class,'like']);
+    Route::post('/designs/{design}/liked',[DesignController::class,'likedByUser']);
 });

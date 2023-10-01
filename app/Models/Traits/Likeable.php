@@ -33,7 +33,7 @@ trait Likeable {
         $this->likes()->where('user_id',auth()->id())->delete();
     }
 
-    private function alreadyLikedByUser() {
-        return (bool) $this->likes()->where('user_id',auth()->id())->count();
+    public function alreadyLikedByUser() {
+        return (bool) $this->likes->where('user_id', auth()->id())->count();
     }
 }
