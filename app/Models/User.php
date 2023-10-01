@@ -47,4 +47,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Design::class);
     }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable')
+            ->orderBy('created_at', 'asc');
+    }
 }
