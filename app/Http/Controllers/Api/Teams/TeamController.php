@@ -18,7 +18,7 @@ class TeamController extends Controller
      */
     public function index()
     {
-        return TeamResource::collection(Team::with(["owner", "members"])->get());
+        return TeamResource::collection(Team::with(["owner", "members", "designs"])->get());
     }
 
     /**

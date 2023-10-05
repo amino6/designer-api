@@ -26,6 +26,7 @@ class UpdateDesignRequest extends FormRequest
             "title" => ["required", Rule::unique('designs')->ignore($this->design?->id)],
             "description" => ['required',"string","min:20"],
             'tags' => ['required'],
+            'team' => ['required_if:assign_to_team,true']
         ];
     }
 }

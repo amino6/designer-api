@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\MissingValue;
 
 class TeamResource extends JsonResource
 {
@@ -19,8 +20,9 @@ class TeamResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'owner' => new UserResource($this->whenLoaded("owner")),
-            'total_members' => $this->members->count(),
-            'members' => UserResource::collection($this->whenLoaded("members"))
+            'designs' => DesignResource::collection($this->whenLoaded("designs")),
+            'total_members' => $this->relationLoaded("members") ? $this->members->count() : new MissingValue(),
+            'members' => UserResource::collection($this->whenLoaded("members")),
         ];
     }
 }

@@ -28,7 +28,8 @@ class DesignController extends Controller
             "title" => $request->title,
             "slug" => Str::slug($request->title),
             "description" => $request->description,
-            "is_live" => $is_live
+            "is_live" => $is_live,
+            "team_id" => $request->team ?? null,
         ]);
 
         $design->retag($request->tags);

@@ -20,6 +20,10 @@ class Team extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
+    public function designs() {
+        return $this->hasMany(Design::class);
+    }
+
     public function members()
     {
         return $this->belongsToMany(User::class, "user_team");

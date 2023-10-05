@@ -24,12 +24,18 @@ class Design extends Model
         'colse_to_comment',
         'is_live',
         'upload_successful',
-        'disk'
+        'disk',
+        'team_id'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
     }
 
     public function comments()
