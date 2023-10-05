@@ -53,4 +53,19 @@ class User extends Authenticatable
         return $this->morphMany(Comment::class, 'commentable')
             ->orderBy('created_at', 'asc');
     }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class);
+    }
+
+    public function ownedTeams()
+    {
+        return $this->teams()->where('owner_id', $this->id);
+    }
+
+    public function isOwnerOfTeam($team_id)
+    {
+        return (bool) $this->teams()->where('team_id', $team_id)->where('owner_id', $this->id)->count();
+    }
 }
