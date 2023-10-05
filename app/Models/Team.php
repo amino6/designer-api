@@ -20,7 +20,8 @@ class Team extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function designs() {
+    public function designs()
+    {
         return $this->hasMany(Design::class);
     }
 
@@ -32,5 +33,15 @@ class Team extends Model
     public function hasUser($user_id)
     {
         return (bool) $this->members->where('id', $user_id)->count();
+    }
+
+    public function invitations()
+    {
+        return $this->hasMany(Invitation::class);
+    }
+
+    public function hasPendingInvite($email)
+    {
+        return (bool) $this->invitations()->where('recipient_email', $email)->count();
     }
 }

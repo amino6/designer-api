@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return (bool) $this->teams()->where('team_id', $team_id)->where('owner_id', $this->id)->count();
     }
+
+    public function invitaions()
+    {
+        return $this->hasMany(Invitation::class, 'recipient_email', 'email');
+    }
 }
