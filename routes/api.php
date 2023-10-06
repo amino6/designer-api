@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Designs\DesignController;
 use App\Http\Controllers\Api\Designs\UploadController;
 use App\Http\Controllers\Api\Comments\CommentController;
+use App\Http\Controllers\Api\Teams\InvitationController;
 use App\Http\Controllers\Api\Teams\TeamController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -52,4 +53,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put("teams/{team}", [TeamController::class, "update"]);
     Route::delete("teams/{team}", [TeamController::class, "destroy"]);
     Route::get('/users/teams', [TeamController::class, 'getUserTeams']);
+
+    // invitations
+    Route::post('/invitations/{team}', [InvitationController::class, 'invite']);
+    Route::post('/invitations/{invitation}/resend', [InvitationController::class, 'resend']);
+    Route::post('/invitations/{invitation}/respond', [InvitationController::class, 'respond']);
+    Route::delete('/invitations/{invitation}', [InvitationController::class, 'destroy']);
 });
