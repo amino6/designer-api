@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTeamRequest;
 use App\Http\Resources\TeamResource;
 use App\Models\Team;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -101,5 +102,26 @@ class TeamController extends Controller
             return new TeamResource($team[0]);
         else
             return response()->json(['team not found'], 404);
+    }
+
+    public function removeUserFromTeam(Team $team, User $user)
+    {
+        $this->authorize('delete_user', $team);
+
+        if ($team->owner_id === auth()->user()->id) {
+            return response()->json([
+                'message' => 'you\'re the owner'
+            ], 401);
+        }
+
+        if (!auth()->user()->isOwnerOfTeam($team->id) && auth()->id() !== $user->id) {
+            return response()->json([
+                'message' => 'unauthorized action'
+            ], 403);
+        }
+
+        $team->members()->detach($user->id);
+
+        return response()->json(['msg' => 'user removed successfuly']);
     }
 }

@@ -63,4 +63,9 @@ class TeamPolicy
     {
         //
     }
+
+    public function delete_user(User $user, Team $team): bool
+    {
+        return $user->id === $team->owner_id;
+    }
 }

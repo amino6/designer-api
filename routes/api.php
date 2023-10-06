@@ -53,6 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put("teams/{team}", [TeamController::class, "update"]);
     Route::delete("teams/{team}", [TeamController::class, "destroy"]);
     Route::get('/users/teams', [TeamController::class, 'getUserTeams']);
+    Route::delete('/teams/{team}/user/{user}', [TeamController::class, 'removeUserFromTeam']);
 
     // invitations
     Route::post('/invitations/{team}', [InvitationController::class, 'invite']);
