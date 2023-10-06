@@ -52,19 +52,32 @@ class DesignController extends Controller
         return response()->json(status: 200);
     }
 
-    public function like(Design $design) {
-        if($design->alreadyLikedByUser()) {
+    public function like(Design $design)
+    {
+        if ($design->alreadyLikedByUser()) {
             $design->unlike();
             return response()->json(["unliked"]);
-        }else {
+        } else {
             $design->like();
             return response()->json(["liked"]);
         }
     }
 
-    public function likedByUser(Design $design) {
+    public function likedByUser(Design $design)
+    {
         return response()->json([
             "liked" => $design->alreadyLikedByUser()
         ]);
+    }
+
+    public function search(Request $request)
+    {
+        $designs = Design::with([
+            "likes",
+            "tags",
+            "team"
+        ])->search($request)->get();
+
+        return DesignResource::collection($designs);
     }
 }

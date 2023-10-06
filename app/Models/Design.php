@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Cviebrock\EloquentTaggable\Taggable;
 use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
+use Illuminate\Http\Request;
 
 class Design extends Model
 {
@@ -55,5 +56,33 @@ class Design extends Model
             $thumbnail,
             $original
         ];
+    }
+
+    protected function scopeSearch($query, Request $request)
+    {
+        $query->where('is_live', true);
+
+        if ($request->has_comments) {
+            $query = $query->has('comments');
+        }
+
+        if ($request->has_team) {
+            $query = $query->has('team');
+        }
+
+        if ($request->q) {
+            $query = $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->q . '%')
+                    ->orWhere('description', 'like', '%' . $request->q . '%');
+            });
+        }
+
+        if ($request->orderBy == 'likes') {
+            $query = $query->withCount('likes')->orderBy('likes_count', 'desc');
+        } else {
+            $query = $query->latest();
+        }
+
+        return $query;
     }
 }
