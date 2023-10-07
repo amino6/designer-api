@@ -52,6 +52,10 @@ class User extends Authenticatable
         'location' => Point::class,
     ];
 
+    protected $appends = [
+        'photo_url'
+    ];
+
     public function designs()
     {
         return $this->hasMany(Design::class);
@@ -81,6 +85,11 @@ class User extends Authenticatable
     public function invitaions()
     {
         return $this->hasMany(Invitation::class, 'recipient_email', 'email');
+    }
+
+    public function getPhotoUrlAttribute()
+    {
+        return 'https://www.gravatar.com/avatar/' . md5(strtolower($this->email)) . 'jpg?s=200&d=mm';
     }
 
     protected function scopeSearch($query, Request $request)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Teams;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTeamRequest;
+use App\Http\Resources\DesignResource;
 use App\Http\Resources\TeamResource;
 use App\Models\Team;
 use App\Models\User;
@@ -123,5 +124,16 @@ class TeamController extends Controller
         $team->members()->detach($user->id);
 
         return response()->json(['msg' => 'user removed successfuly']);
+    }
+
+    public function getTeamDesigns($slug)
+    {
+        $team = Team::with("designs")->where('slug', $slug)->get();
+
+        if ($team->count() > 0) {
+            return DesignResource::collection($team[0]->designs());
+        } else {
+            return response()->json(['team not found'], 404);
+        }
     }
 }

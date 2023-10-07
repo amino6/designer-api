@@ -70,6 +70,17 @@ class DesignController extends Controller
         ]);
     }
 
+    public function findBySlug($slug)
+    {
+        $design = Design::where('slug', $slug)->get();
+
+        if ($design->count() > 0) {
+            return new DesignResource($design[0]);
+        } else {
+            return response()->json(['no design found'], 404);
+        }
+    }
+
     public function search(Request $request)
     {
         $designs = Design::with([

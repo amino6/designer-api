@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DesignResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -45,5 +46,18 @@ class UserController extends Controller
             ->get();
 
         return UserResource::collection($designers);
+    }
+
+    public function getUserDesigns(String|Int $id)
+    {
+        $user = User::with('designs')
+            ->findOrFail($id)
+            ->get();
+
+        if ($user->count()) {
+            return DesignResource::collection($user[0]->designs());
+        } else {
+            return response()->json(['user not found'], 404);
+        }
     }
 }

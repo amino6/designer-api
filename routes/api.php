@@ -33,8 +33,11 @@ Route::get('search/designs', [DesignController::class, 'search']);
 Route::get('search/designers', [UserController::class, 'search']);
 
 // teams
-Route::get('/teams/slug/{slug}', [TeamController::class, 'findBySlug']);
-//Route::get('/teams/slug/{slug}/designs', [TeamController::class, 'getTeamDesigns']);
+Route::get('teams/slug/{slug}', [TeamController::class, 'findBySlug']);
+Route::get('teams/slug/{slug}/designs', [TeamController::class, 'getTeamDesigns']);
+
+// users
+Route::get('users/{id}/designs', [UserController::class, 'getUserDesigns']);
 
 Route::middleware('auth:sanctum')->group(function () {
     // designs
@@ -42,7 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put("designs/{design}", [DesignController::class, "update"]);
     Route::delete("designs/{design}", [DesignController::class, "destroy"]);
 
-    // users settings
+    // users
     Route::post("user/settings", [UserController::class, "updateProfile"]);
 
     // comments
