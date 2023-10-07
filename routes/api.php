@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Designs\UploadController;
 use App\Http\Controllers\Api\Comments\CommentController;
 use App\Http\Controllers\Api\Teams\InvitationController;
 use App\Http\Controllers\Api\Teams\TeamController;
+use App\Http\Controllers\Api\Users\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::get('designs/slug/{slug}', [DesignController::class, 'findBySlug']);
 
 // search
 Route::get('search/designs', [DesignController::class, 'search']);
+Route::get('search/designers', [UserController::class, 'search']);
 
 // teams
 Route::get('/teams/slug/{slug}', [TeamController::class, 'findBySlug']);
@@ -39,6 +41,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post("designs", [UploadController::class, "upload"]);
     Route::put("designs/{design}", [DesignController::class, "update"]);
     Route::delete("designs/{design}", [DesignController::class, "destroy"]);
+
+    // users settings
+    Route::post("user/settings", [UserController::class, "updateProfile"]);
 
     // comments
     Route::post("designs/{design}/comments", [CommentController::class, "store"]);

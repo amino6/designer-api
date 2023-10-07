@@ -5,12 +5,15 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasSpatial;
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +24,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'tagline',
+        'about',
+        'location',
+        'formatted_address',
+        'available_to_hire'
     ];
 
     /**
@@ -41,6 +49,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'location' => Point::class,
     ];
 
     public function designs()
@@ -72,5 +81,38 @@ class User extends Authenticatable
     public function invitaions()
     {
         return $this->hasMany(Invitation::class, 'recipient_email', 'email');
+    }
+
+    protected function scopeSearch($query, Request $request)
+    {
+        if ($request->has_design) {
+            $query->has('designs');
+        }
+
+        if ($request->available_to_hire) {
+            $query->where('available_to_hire', true);
+        }
+
+        $lat = $request->latitude;
+        $lng = $request->longitude;
+        $dist = $request->distance;
+        $unit = $request->unit;
+
+        if ($lat && $lng) {
+            $point = new Point($lat, $lng);
+            // convert distance to meters
+            $unit == 'km' ? $dist *= 1000 : $dist *= 1609.34;
+            $query->whereDistanceSphere('location', $point,  '<', $dist);
+        }
+
+        if ($request->orderBy == 'closest' && isset($point)) {
+            $query->orderByDistanceSphere('location', $point, 'asc');
+        } else if ($request->orderBy == 'latest') {
+            $query->latest();
+        } else {
+            $query->oldest();
+        }
+
+        return $query;
     }
 }
