@@ -81,6 +81,11 @@ class DesignController extends Controller
         }
     }
 
+    public function findById(Design $design)
+    {
+        return new DesignResource($design);
+    }
+
     public function search(Request $request)
     {
         $designs = Design::with([

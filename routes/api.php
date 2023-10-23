@@ -41,6 +41,7 @@ Route::get('users/{id}/designs', [UserController::class, 'getUserDesigns']);
 
 Route::middleware('auth:sanctum')->group(function () {
     // designs
+    Route::get("designs/{design}", [DesignController::class, "findById"]);
     Route::post("designs", [UploadController::class, "upload"]);
     Route::put("designs/{design}", [DesignController::class, "update"]);
     Route::delete("designs/{design}", [DesignController::class, "destroy"]);
