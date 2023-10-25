@@ -41,13 +41,14 @@ Route::get('users/{id}/designs', [UserController::class, 'getUserDesigns']);
 
 Route::middleware('auth:sanctum')->group(function () {
     // designs
-    Route::get("designs/{design}", [DesignController::class, "findById"]);
+    Route::get("designs/{id}", [DesignController::class, "findById"]);
     Route::post("designs", [UploadController::class, "upload"]);
     Route::put("designs/{design}", [DesignController::class, "update"]);
     Route::delete("designs/{design}", [DesignController::class, "destroy"]);
 
     // users
     Route::post("user/settings", [UserController::class, "updateProfile"]);
+    Route::get('users/designs', [UserController::class, 'getDesigns']);
 
     // comments
     Route::post("designs/{design}/comments", [CommentController::class, "store"]);

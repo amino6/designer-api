@@ -60,4 +60,11 @@ class UserController extends Controller
             return response()->json(['user not found'], 404);
         }
     }
+
+    public function getDesigns()
+    {
+        $designs = auth()->user()->designs();
+
+        return DesignResource::collection($designs);
+    }
 }
