@@ -63,7 +63,7 @@ class UserController extends Controller
 
     public function getDesigns()
     {
-        $designs = auth()->user()->designs();
+        $designs = auth()->user()->designs;
 
         return DesignResource::collection($designs);
     }
