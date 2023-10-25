@@ -29,7 +29,7 @@ class DesignController extends Controller
             "slug" => Str::slug($request->title),
             "description" => $request->description,
             "is_live" => $is_live,
-            "team_id" => $request->team ?? null,
+            "team_id" => $request->team && $request->assign_to_team ? $request->team : null,
         ]);
 
         $design->retag($request->tags);
@@ -81,9 +81,15 @@ class DesignController extends Controller
         }
     }
 
-    public function findById(Design $design)
+    public function findById($id)
     {
-        return new DesignResource($design);
+        $design = Design::where('id', $id)->with(['tags', 'team'])->get();
+
+        if ($design->count() > 0) {
+            return new DesignResource($design[0]);
+        } else {
+            return response()->json(['no design found'], 404);
+        }
     }
 
     public function search(Request $request)
