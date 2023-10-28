@@ -57,8 +57,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete("designs/{design}/comments/{comment}", [CommentController::class, "destroy"]);
 
     // likes
-    Route::post('/designs/{design}/like', [DesignController::class, 'like']);
-    Route::post('/designs/{design}/liked', [DesignController::class, 'likedByUser']);
+    Route::post('designs/{design}/like', [DesignController::class, 'like']);
+    Route::post('designs/{design}/liked', [DesignController::class, 'likedByUser']);
 
     // teams
     Route::get("teams", [TeamController::class, "index"]);
@@ -66,12 +66,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get("teams/{team}", [TeamController::class, "show"]);
     Route::put("teams/{team}", [TeamController::class, "update"]);
     Route::delete("teams/{team}", [TeamController::class, "destroy"]);
-    Route::get('/users/teams', [TeamController::class, 'getUserTeams']);
-    Route::delete('/teams/{team}/user/{user}', [TeamController::class, 'removeUserFromTeam']);
+    Route::get('users/teams', [TeamController::class, 'getUserTeams']);
+    Route::delete('teams/{team}/user/{user}', [TeamController::class, 'removeUserFromTeam']);
 
     // invitations
-    Route::post('/invitations/{team}', [InvitationController::class, 'invite']);
-    Route::post('/invitations/{invitation}/resend', [InvitationController::class, 'resend']);
-    Route::post('/invitations/{invitation}/respond', [InvitationController::class, 'respond']);
-    Route::delete('/invitations/{invitation}', [InvitationController::class, 'destroy']);
+    Route::post('invitations/{team}', [InvitationController::class, 'invite']);
+    Route::post('invitations/{invitation}/resend', [InvitationController::class, 'resend']);
+    Route::post('invitations/{invitation}/respond', [InvitationController::class, 'respond']);
+    Route::delete('invitations/{invitation}', [InvitationController::class, 'destroy']);
 });

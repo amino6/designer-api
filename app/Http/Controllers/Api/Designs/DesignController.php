@@ -97,7 +97,8 @@ class DesignController extends Controller
         $designs = Design::with([
             "likes",
             "tags",
-            "team"
+            "team",
+            "user"
         ])->search($request)->get();
 
         return DesignResource::collection($designs);

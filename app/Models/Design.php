@@ -77,8 +77,15 @@ class Design extends Model
             });
         }
 
+        if ($request->tags) {
+            if(is_array($request->tags)) {
+                $request->tags = implode(",", $request->tags);
+            }
+            $query = $query->withAnyTags($request->tags);
+        }
+
         if ($request->orderBy == 'likes') {
-            $query = $query->withCount('likes')->orderBy('likes_count', 'desc');
+            $query = $query->withCount('likes')->orderBy('likes_count', 'desc')->latest();
         } else {
             $query = $query->latest();
         }
