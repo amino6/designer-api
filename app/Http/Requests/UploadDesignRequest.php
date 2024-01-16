@@ -22,7 +22,7 @@ class UploadDesignRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "image" => ['required','mimes:jpg,jpeg,png,bmp,gif,webp','max:2048']
+            "image" => ['required','mimes:jpg,jpeg,png,bmp,gif,webp','max:10240']
         ];
     }
 }
