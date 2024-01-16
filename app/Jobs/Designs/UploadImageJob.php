@@ -30,7 +30,7 @@ class UploadImageJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $original_img = storage_path() . '/uploads/original/' . $this->design->image;
+        $original_img = storage_path() . '/app/public/uploads/designs/original/' . $this->design->image;
 
         try {
             // create the large image
@@ -42,10 +42,6 @@ class UploadImageJob implements ShouldQueue
                 ->save($thumbnail = storage_path('uploads/thumbnail/' . $this->design->image));
 
             // move images from tmp to permanent disk
-            if ($this->move_img_to($this->design->disk, 'uploads/designs/original/' . $this->design->image, $original_img)) {
-                Storage::disk('tmp')->delete("/uploads/original/" . $this->design->image);
-            }
-
             if ($this->move_img_to($this->design->disk, 'uploads/designs/large/' . $this->design->image, $large)) {
                 Storage::disk('tmp')->delete("/uploads/large/" . $this->design->image);
             }

@@ -18,7 +18,7 @@ class UploadController extends Controller
         $filename = time() . "_" . preg_replace('/\s+/', '_', strtolower($image->getClientOriginalName()));
 
         // move image to tmp folder
-        $tmp = $image->storeAs('uploads/original', $filename, 'tmp');
+        $tmp = $image->storeAs('uploads/designs/original', $filename, config('site.upload_disk'));
 
         $design = Design::create([
             'image' => $filename,
