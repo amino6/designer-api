@@ -42,7 +42,7 @@ class Design extends Model
     public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable')
-            ->orderBy('created_at', 'asc');
+            ->orderBy('created_at', 'desc');
     }
 
     public function getImagesAttribute()
@@ -52,9 +52,9 @@ class Design extends Model
         $original = Storage::disk($this->disk)->url('uploads/designs/original/' . $this->image);
 
         return [
-            $large,
-            $thumbnail,
-            $original
+            "large" => $large,
+            "thumbnail" => $thumbnail,
+            "original" => $original
         ];
     }
 
@@ -66,8 +66,8 @@ class Design extends Model
             $query = $query->has('comments');
         }
 
-        if ($request->has_team) {
-            $query = $query->has('team');
+        if ($request->has_likes) {
+            $query = $query->has('likes');
         }
 
         if ($request->q) {
