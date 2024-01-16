@@ -72,7 +72,13 @@ class DesignController extends Controller
 
     public function findBySlug($slug)
     {
-        $design = Design::where('slug', $slug)->get();
+        $design = Design::where('slug', $slug)->with([
+            "team",
+            "comments",
+            "tags",
+            "user",
+            "likes"
+        ])->get();
 
         if ($design->count() > 0) {
             return new DesignResource($design[0]);
@@ -99,7 +105,7 @@ class DesignController extends Controller
             "tags",
             "team",
             "user"
-        ])->search($request)->get();
+        ])->search($request)->paginate(12);
 
         return DesignResource::collection($designs);
     }
