@@ -28,7 +28,10 @@ class User extends Authenticatable
         'about',
         'location',
         'formatted_address',
-        'available_to_hire'
+        'available_to_hire',
+        'contact_email',
+        'website_url',
+        'job_title'
     ];
 
     /**
@@ -89,13 +92,25 @@ class User extends Authenticatable
 
     public function getPhotoUrlAttribute()
     {
-        return 'https://www.gravatar.com/avatar/' . md5(strtolower($this->email)) . 'jpg?s=200&d=mm';
+        $headers = get_headers('https://www.gravatar.com/avatar/' . md5(strtolower($this->email)) . '?d=404');
+        $response_code = substr($headers[0], 9, 3);
+        if($response_code == '200') {
+            return 'https://www.gravatar.com/avatar/' . md5(strtolower($this->email));
+        }else {
+            return 'https://www.gravatar.com/avatar/' . md5(strtolower($this->email)) . 'jpg?s=200&d=mm';
+        }
     }
 
     protected function scopeSearch($query, Request $request)
     {
-        if ($request->has_design) {
-            $query->has('designs');
+        if ($request->has_designs) {
+            $query->whereHas('designs', function ($query) {
+                $query->where('is_live', true);
+            });
+        }
+
+        if ($request->q) {
+            $query->where('name', 'like', '%' . $request->q . '%');
         }
 
         if ($request->available_to_hire) {
@@ -104,22 +119,29 @@ class User extends Authenticatable
 
         $lat = $request->latitude;
         $lng = $request->longitude;
-        $dist = $request->distance;
+        $dist = $request->distance ?? 0;
         $unit = $request->unit;
 
         if ($lat && $lng) {
             $point = new Point($lat, $lng);
             // convert distance to meters
-            $unit == 'km' ? $dist *= 1000 : $dist *= 1609.34;
-            $query->whereDistanceSphere('location', $point,  '<', $dist);
+            if (strtolower($unit) === 'km') {
+                $dist *= 1000;
+            } else {
+                $dist *= 1609.34;
+            }
+
+            if ($dist > 0) {
+                $query->whereDistanceSphere('location', $point,  '<', $dist);
+            }else {
+                $query->whereDistanceSphere('location', $point,  '<', 10000);
+            }
         }
 
         if ($request->orderBy == 'closest' && isset($point)) {
             $query->orderByDistanceSphere('location', $point, 'asc');
-        } else if ($request->orderBy == 'latest') {
-            $query->latest();
         } else {
-            $query->oldest();
+            $query->withCount('designs')->orderBy('designs_count', 'desc');
         }
 
         return $query;
