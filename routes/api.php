@@ -20,26 +20,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware("auth:sanctum")->get("/user", function (Request $request) {
     return $request->user();
 });
 
 // designs
 Route::get("designs", [DesignController::class, "index"]);
-Route::get('designs/slug/{slug}', [DesignController::class, 'findBySlug']);
+Route::get("designs/slug/{slug}", [DesignController::class, "findBySlug"]);
 
 // search
-Route::get('search/designs', [DesignController::class, 'search']);
-Route::get('search/designers', [UserController::class, 'search']);
+Route::get("search/designs", [DesignController::class, "search"]);
+Route::get("search/designers", [UserController::class, "search"]);
 
 // teams
-Route::get('teams/slug/{slug}', [TeamController::class, 'findBySlug']);
-Route::get('teams/slug/{slug}/designs', [TeamController::class, 'getTeamDesigns']);
+Route::get("teams/slug/{slug}", [TeamController::class, "findBySlug"]);
+Route::get("teams/slug/{slug}/designs", [TeamController::class, "getTeamDesigns"]);
 
 // users
-Route::get('users/{id}/designs', [UserController::class, 'getUserDesigns']);
+Route::get("users/{id}/info", [UserController::class, "getUserInfo"]);
+Route::get("users/{user}/designs", [UserController::class, "getUserDesigns"]);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware("auth:sanctum")->group(function () {
     // designs
     Route::get("designs/{id}", [DesignController::class, "findById"]);
     Route::post("designs", [UploadController::class, "upload"]);
@@ -47,8 +48,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete("designs/{design}", [DesignController::class, "destroy"]);
 
     // users
-    Route::post("user/settings", [UserController::class, "updateProfile"]);
-    Route::get('users/designs', [UserController::class, 'getDesigns']);
+    Route::put("user/settings", [UserController::class, "updateProfile"]);
+    Route::put("user/contact-information", [UserController::class, "updateContacts"]);
+    Route::get("users/designs", [UserController::class, "getDesigns"]);
+    Route::get("user/designs/liked", [UserController::class, "getLikedDesigns"]);
 
     // comments
     Route::post("designs/{design}/comments", [CommentController::class, "store"]);
@@ -57,8 +60,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete("designs/{design}/comments/{comment}", [CommentController::class, "destroy"]);
 
     // likes
-    Route::post('designs/{design}/like', [DesignController::class, 'like']);
-    Route::post('designs/{design}/liked', [DesignController::class, 'likedByUser']);
+    Route::post("designs/{design}/like", [DesignController::class, "like"]);
+    Route::post("designs/{design}/liked", [DesignController::class, "likedByUser"]);
 
     // teams
     Route::get("teams", [TeamController::class, "index"]);
@@ -66,12 +69,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get("teams/{team}", [TeamController::class, "show"]);
     Route::put("teams/{team}", [TeamController::class, "update"]);
     Route::delete("teams/{team}", [TeamController::class, "destroy"]);
-    Route::get('users/teams', [TeamController::class, 'getUserTeams']);
-    Route::delete('teams/{team}/user/{user}', [TeamController::class, 'removeUserFromTeam']);
+    Route::get("users/teams", [TeamController::class, "getUserTeams"]);
+    Route::delete("teams/{team}/user/{user}", [TeamController::class, "removeUserFromTeam"]);
 
     // invitations
-    Route::post('invitations/{team}', [InvitationController::class, 'invite']);
-    Route::post('invitations/{invitation}/resend', [InvitationController::class, 'resend']);
-    Route::post('invitations/{invitation}/respond', [InvitationController::class, 'respond']);
-    Route::delete('invitations/{invitation}', [InvitationController::class, 'destroy']);
+    Route::post("invitations/{team}", [InvitationController::class, "invite"]);
+    Route::post("invitations/{invitation}/resend", [InvitationController::class, "resend"]);
+    Route::post("invitations/{invitation}/respond", [InvitationController::class, "respond"]);
+    Route::delete("invitations/{invitation}", [InvitationController::class, "destroy"]);
 });

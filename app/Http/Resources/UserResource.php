@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\MissingValue;
 
 class UserResource extends JsonResource
 {
@@ -18,7 +19,9 @@ class UserResource extends JsonResource
             "id" => $this->id,
             "name" => $this->name,
             "email" => $this->email,
-            "profile_image" => $this->photo_url
+            "job_title" => $this->job_title,
+            "profile_image" => $this->photo_url,
+            "designs_count" => $this->designs_count ?? new MissingValue()
         ];
     }
 }
