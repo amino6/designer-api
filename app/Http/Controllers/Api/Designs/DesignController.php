@@ -12,12 +12,6 @@ use Illuminate\Support\Facades\Storage;
 
 class DesignController extends Controller
 {
-    public function index()
-    {
-        $designs = Design::with(["tags", "user", "likes"])->get();
-        return DesignResource::collection($designs);
-    }
-
     public function update(UpdateDesignRequest $request, Design $design)
     {
         $this->authorize("update", $design);

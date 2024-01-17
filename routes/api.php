@@ -25,7 +25,6 @@ Route::middleware("auth:sanctum")->get("/user", function (Request $request) {
 });
 
 // designs
-Route::get("designs", [DesignController::class, "index"]);
 Route::get("designs/slug/{slug}", [DesignController::class, "findBySlug"]);
 
 // search
