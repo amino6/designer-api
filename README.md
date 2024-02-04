@@ -1,6 +1,6 @@
-<p align="center"><a href="designshare.uk.to" target="_blank"><h1>DesignShare</h1></a></p>
-
 <img src="Screenshot.png" alt="designshare screenshot">
+
+<p><a href="designshare.uk.to" target="_blank">DesignShare</a></p>
 
 # DesignShare - Api
 
