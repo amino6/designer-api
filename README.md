@@ -20,12 +20,11 @@ DesignShare is a platform where designers can share their designs. This reposito
 ### Installation
 
 * Clone the repository
-* Install dependencies:
+* Install dependencies and setup laravel:
 ```bash
 composer install
+cp .env.example .env
 php artisan key:generate
-php artisan migrate
-php artisan serve
 ```
 ### Configuration
 
@@ -33,3 +32,10 @@ php artisan serve
 * Set the QUEUE_CONNECTION to database in .env
 * Set the SANCTUM_STATEFUL_DOMAINS to your frontend domains in .env
 * Set the default upload disk in the config/site.php file
+
+### run locally
+```bash
+php artisan migrate
+php artisan serve
+php artisan queue:work
+```
